@@ -26,8 +26,6 @@ const App = () => {
 
       console.log("running equals useEffect");
 
-     //the calculator "mostly" works, there are some oddities though when running operations that a normal calculator wouldnt' do.  
-
       if (calcState.prevOp === Op.Addition) {
         setCalcState((prev) => { return { 
           ...prev, 
