@@ -17,7 +17,7 @@ const CalculatorButton = ( {setCalcState, displayValue, variant }: TCalculatorBu
             setCalcState( (prev) => { return { 
                 ...prev, 
                 screenValue: prev.screenValue + val.innerHTML,
-                currentValue: prev.posNeg === PosNeg.Negative ? 0 - +(prev.screenValue + val.innerHTML).substring(2) : +(prev.screenValue + val.innerHTML)
+                currentValue: prev.posNeg === PosNeg.Negative ? 0 - +(prev.screenValue + val.innerHTML).substring(1) : +(prev.screenValue + val.innerHTML)
             }});
             console.log('num');
         }
@@ -28,9 +28,9 @@ const CalculatorButton = ( {setCalcState, displayValue, variant }: TCalculatorBu
                 ...prev, 
                 prevOp: prev.currentOp, 
                 currentOp: cop?.eop,
-                prevValue: prev.currentValue,                
+                prevValue: prev.prevOp !== Op.Initial ? prev.prevValue : prev.currentValue,                
                 currentValue: 0,
-                screenValue: prev.posNeg === PosNeg.Negative ? "- " : ""
+                screenValue: prev.posNeg === PosNeg.Negative ? "-" : ""
             }});
             console.log('op');
         }
@@ -38,7 +38,7 @@ const CalculatorButton = ( {setCalcState, displayValue, variant }: TCalculatorBu
             setCalcState( (prev) => { return { 
                 ...prev, 
                 posNeg: prev.posNeg === PosNeg.Positive ? PosNeg.Negative : PosNeg.Positive, 
-                screenValue: prev.posNeg === PosNeg.Positive ? '- ' + prev.screenValue : prev.screenValue.substring(2),
+                screenValue: prev.posNeg === PosNeg.Positive ? '-' + prev.screenValue : prev.screenValue.substring(1),
                 currentValue: prev.posNeg === PosNeg.Positive ? 0-prev.currentValue : Math.abs(prev.currentValue)
             }});
             console.log('posneg');
@@ -47,8 +47,8 @@ const CalculatorButton = ( {setCalcState, displayValue, variant }: TCalculatorBu
             setCalcState( (prev) => { return { 
                 ...prev, 
                 currentOp: Op.Equals, 
-                prevOp: prev.currentOp, 
-                lastValue: prev.prevOp === Op.Initial ? prev.currentValue : prev.lastValue
+                prevOp: prev.currentOp 
+                //prevValue: prev.screenValue[0] === "-" ? +prev.screenValue.substring(1) : +prev.screenValue
             }});
             console.log('equals');
         } else if (val.innerHTML === "AC") {
@@ -68,8 +68,14 @@ const CalculatorButton = ( {setCalcState, displayValue, variant }: TCalculatorBu
                 screenValue: prev.screenValue + "."            
             }});
             console.log('.');
-    }
-
+        } else if (val.innerHTML === "%") {
+            setCalcState( (prev) => { return { 
+                ...prev,
+                screenValue: prev.posNeg === PosNeg.Negative ? (0 - +(prev.screenValue).substring(1) / 100).toString() : (+(prev.screenValue) / 100).toString(),
+                currentValue: prev.posNeg === PosNeg.Negative ? 0 - +(prev.screenValue).substring(1) / 100 : +(prev.screenValue) / 100
+            }});
+            console.log('%');
+        }
     };
 
     return (

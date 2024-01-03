@@ -15,8 +15,8 @@ const App = () => {
     screenValue: "",
     prevValue: 0,
     currentValue: 0,
-    lastValue: 0,
     currentOp: Op.Initial, 
+    prevOp: Op.Initial,
     posNeg: PosNeg.Positive
   });
 
@@ -31,34 +31,30 @@ const App = () => {
       if (calcState.prevOp === Op.Addition) {
         setCalcState((prev) => { return { 
           ...prev, 
-          screenValue: (calcState.prevValue + calcState.currentValue).toString(), 
-          currentValue: (calcState.prevValue + calcState.currentValue),
-          prevValue: calcState.lastValue,
-          currentOp: calcState.prevOp
+          screenValue: (prev.prevValue + prev.currentValue).toString(),           
+          prevValue: (prev.prevValue + prev.currentValue),
+          currentOp: prev.prevOp
         }})        
       } else if (calcState.prevOp === Op.Multiplicatoin) {
         setCalcState((prev) => { return { 
           ...prev, 
-          screenValue: (calcState.prevValue * calcState.currentValue).toString(), 
-          currentValue: (calcState.prevValue * calcState.currentValue),
-          prevValue: calcState.lastValue,
-          currentOp: calcState.prevOp
+          screenValue: (prev.prevValue * prev.currentValue).toString(), 
+          prevValue: (prev.prevValue * prev.currentValue),          
+          currentOp: prev.prevOp
         }})
       } else if (calcState.prevOp === Op.Subtraction) {
           setCalcState((prev) => { return { 
             ...prev, 
-            screenValue: (calcState.prevValue - calcState.currentValue).toString(), 
-            prevValue: (calcState.prevValue - calcState.currentValue),
-            currentValue: calcState.lastValue,
-            currentOp: calcState.prevOp
+            screenValue: (prev.prevValue - prev.currentValue).toString(),             
+            prevValue: (prev.prevValue - prev.currentValue),
+            currentOp: prev.prevOp
           }})
       } else if (calcState.prevOp === Op.Division) {
         setCalcState((prev) => { return { 
           ...prev, 
-          screenValue: (calcState.prevValue / calcState.currentValue).toString(), 
-          prevValue: (calcState.prevValue / calcState.currentValue),
-          currentValue: calcState.lastValue,
-          currentOp: calcState.prevOp
+          screenValue: (prev.prevValue / prev.currentValue).toString(), 
+          prevValue: (prev.prevValue / prev.currentValue),          
+          currentOp: prev.prevOp
         }})
       }          
     }
