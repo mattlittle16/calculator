@@ -1,4 +1,4 @@
-import { Op, PosNeg } from './enums'
+import { Hundreds, Op, PosNeg } from './enums'
 
 export type TCalculatorButton = {
     setCalcState: React.Dispatch<React.SetStateAction<TCalculatorState>>,
@@ -8,7 +8,9 @@ export type TCalculatorButton = {
 
 export type TCalculatorState = {
     screenValue: string, 
-    prevValue?: string,
+    currentValue: number,
+    prevValue: number,
+    lastValue: number,
     prevOp?: Op,
     currentOp?: Op, 
     posNeg?: PosNeg

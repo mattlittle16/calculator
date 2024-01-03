@@ -13,25 +13,54 @@ const App = () => {
   
   const [calcState, setCalcState] = useState<TCalculatorState>({
     screenValue: "",
-    prevValue: "",
-    currentOp: Op.Addition, 
-    posNeg: PosNeg.Positive 
+    prevValue: 0,
+    currentValue: 0,
+    lastValue: 0,
+    currentOp: Op.Initial, 
+    posNeg: PosNeg.Positive
   });
 
   useEffect(() => {
     if (calcState.currentOp === Op.Equals) {
       console.log(calcState);
 
-      let num1 = calcState.prevValue === undefined || calcState.prevValue === null ? 0 : +calcState.prevValue;
-      let num2 = +calcState.screenValue;
+      console.log("running equals useEffect");
+
+     //the calculator "mostly" works, there are some oddities though when running operations that a normal calculator wouldnt' do.  
 
       if (calcState.prevOp === Op.Addition) {
-        setCalcState((prev) => { return { ...prev, screenValue: (num1 + num2).toString() }})
+        setCalcState((prev) => { return { 
+          ...prev, 
+          screenValue: (calcState.prevValue + calcState.currentValue).toString(), 
+          currentValue: (calcState.prevValue + calcState.currentValue),
+          prevValue: calcState.lastValue,
+          currentOp: calcState.prevOp
+        }})        
       } else if (calcState.prevOp === Op.Multiplicatoin) {
-        setCalcState((prev) => { return { ...prev, screenValue: (num1 * num2).toString(), currentOp: Op.Subtraction }})
-      }
-      
-
+        setCalcState((prev) => { return { 
+          ...prev, 
+          screenValue: (calcState.prevValue * calcState.currentValue).toString(), 
+          currentValue: (calcState.prevValue * calcState.currentValue),
+          prevValue: calcState.lastValue,
+          currentOp: calcState.prevOp
+        }})
+      } else if (calcState.prevOp === Op.Subtraction) {
+          setCalcState((prev) => { return { 
+            ...prev, 
+            screenValue: (calcState.prevValue - calcState.currentValue).toString(), 
+            prevValue: (calcState.prevValue - calcState.currentValue),
+            currentValue: calcState.lastValue,
+            currentOp: calcState.prevOp
+          }})
+      } else if (calcState.prevOp === Op.Division) {
+        setCalcState((prev) => { return { 
+          ...prev, 
+          screenValue: (calcState.prevValue / calcState.currentValue).toString(), 
+          prevValue: (calcState.prevValue / calcState.currentValue),
+          currentValue: calcState.lastValue,
+          currentOp: calcState.prevOp
+        }})
+      }          
     }
   }, [calcState.currentOp]);
 
@@ -39,7 +68,7 @@ const App = () => {
     <Container id="main-container">
       <Row>
         <Col>
-          <Screen screenValue={calcState.screenValue} />
+          <Screen {...calcState} />
         </Col>
       </Row>
       <Row className="mt-3">
@@ -49,7 +78,9 @@ const App = () => {
         <Col>
           <CalculatorButton setCalcState={setCalcState} displayValue={"+/-"} variant="secondary" />
         </Col>
-        <Col></Col>
+        <Col>
+          <CalculatorButton setCalcState={setCalcState} displayValue={"%"} variant="secondary" />
+        </Col>
         <Col>
           <CalculatorButton setCalcState={setCalcState} displayValue={"÷"} variant="warning" />
         </Col>
@@ -65,18 +96,45 @@ const App = () => {
           <CalculatorButton setCalcState={setCalcState} displayValue={"9"} variant="dark" />
         </Col>
         <Col>
-          <CalculatorButton setCalcState={setCalcState} displayValue={"X"} variant="warning" />
+          <CalculatorButton setCalcState={setCalcState} displayValue={"x"} variant="warning" />
         </Col>
       </Row> 
       <Row className="mt-3">
         <Col>
-          
+          <CalculatorButton setCalcState={setCalcState} displayValue={"4"} variant="dark" />
         </Col>
         <Col>
-          
+          <CalculatorButton setCalcState={setCalcState} displayValue={"5"} variant="dark" />
         </Col>
         <Col>
-          
+          <CalculatorButton setCalcState={setCalcState} displayValue={"6"} variant="dark" />
+        </Col>
+        <Col>
+          <CalculatorButton setCalcState={setCalcState} displayValue={"-"} variant="warning" />
+        </Col>
+      </Row> 
+      <Row className="mt-3">
+        <Col>
+          <CalculatorButton setCalcState={setCalcState} displayValue={"1"} variant="dark" />
+        </Col>
+        <Col>
+          <CalculatorButton setCalcState={setCalcState} displayValue={"2"} variant="dark" />
+        </Col>
+        <Col>
+          <CalculatorButton setCalcState={setCalcState} displayValue={"3"} variant="dark" />
+        </Col>
+        <Col>
+          <CalculatorButton setCalcState={setCalcState} displayValue={"+"} variant="warning" />
+        </Col>
+      </Row> 
+      <Row className="mt-3">
+        <Col>          
+        </Col>
+        <Col>
+        <CalculatorButton setCalcState={setCalcState} displayValue={"0"} variant="dark" />          
+        </Col>
+        <Col>          
+          <CalculatorButton setCalcState={setCalcState} displayValue={"."} variant="dark" />
         </Col>
         <Col>
           <CalculatorButton setCalcState={setCalcState} displayValue={"="} variant="warning" />
