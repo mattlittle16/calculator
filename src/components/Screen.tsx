@@ -1,9 +1,9 @@
 import React from "react";
 import Form from 'react-bootstrap/Form';
-import { TCalculatorState } from "../types/types";
 
 
-const Screen = ({ screenValue } : TCalculatorState) => {
+
+const Screen = ({ screenValue} : {screenValue:string} ) => {
 
     return (
         <Form.Control size="lg" type="text" value={screenValue} readOnly={true} />        

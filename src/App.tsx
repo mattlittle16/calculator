@@ -1,68 +1,44 @@
-import React, { useEffect, useState} from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import Screen from './components/Screen';
 import CalculatorButton from './components/CalculatorButton';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { TCalculatorState } from './types/types';
-import { PosNeg, Op } from './types/enums'
+import { useCalcLogic } from './hooks/calcLogic'
 
 
 const App = () => {
+  const [calcState, setCalcState] = useCalcLogic();
   
-  const [calcState, setCalcState] = useState<TCalculatorState>({
-    screenValue: "",
-    prevValue: 0,
-    currentValue: 0,
-    currentOp: Op.Initial, 
-    prevOp: Op.Initial,
-    posNeg: PosNeg.Positive
-  });
-
   useEffect(() => {
-    if (calcState.currentOp === Op.Equals) {
-      console.log(calcState);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
 
-      console.log("running equals useEffect");
-
-      if (calcState.prevOp === Op.Addition) {
-        setCalcState((prev) => { return { 
-          ...prev, 
-          screenValue: (prev.prevValue + prev.currentValue).toString(),           
-          prevValue: (prev.prevValue + prev.currentValue),
-          currentOp: prev.prevOp
-        }})        
-      } else if (calcState.prevOp === Op.Multiplicatoin) {
-        setCalcState((prev) => { return { 
-          ...prev, 
-          screenValue: (prev.prevValue * prev.currentValue).toString(), 
-          prevValue: (prev.prevValue * prev.currentValue),          
-          currentOp: prev.prevOp
-        }})
-      } else if (calcState.prevOp === Op.Subtraction) {
-          setCalcState((prev) => { return { 
-            ...prev, 
-            screenValue: (prev.prevValue - prev.currentValue).toString(),             
-            prevValue: (prev.prevValue - prev.currentValue),
-            currentOp: prev.prevOp
-          }})
-      } else if (calcState.prevOp === Op.Division) {
-        setCalcState((prev) => { return { 
-          ...prev, 
-          screenValue: (prev.prevValue / prev.currentValue).toString(), 
-          prevValue: (prev.prevValue / prev.currentValue),          
-          currentOp: prev.prevOp
-        }})
-      }          
+      let validKeys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", '+', '-', 'enter', '/', '.', '*', 'c', 'backspace', 'delete'];      
+      let sendKey = e.key.toLowerCase();      
+      
+      console.log(sendKey);
+      if (validKeys.includes(sendKey)) {              
+        
+        setCalcState(e.key.toLowerCase());
+      } 
     }
-  }, [calcState.currentOp]);
+    
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [calcState.screenValue]);
+
 
   return <>
     <Container id="main-container">
       <Row>
         <Col>
-          <Screen {...calcState} />
+          <Screen screenValue={calcState.screenValue} />
         </Col>
       </Row>
       <Row className="mt-3">
