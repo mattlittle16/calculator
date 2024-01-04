@@ -1,3 +1,9 @@
 #main-container {
   margin-top: 10vh;
+  border-radius: 5rem;
+  border: 2rem #000 solid;
+  border-radius: 1rem;
+  border: 0.3em #000 solid;
+  padding: 3rem;
+  background-color: #b2bec3 !important;
 }

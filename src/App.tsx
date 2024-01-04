@@ -122,8 +122,6 @@ const App = () => {
         </Col>
       </Row> 
       <Row className="mt-3">
-        <Col>          
-        </Col>
         <Col>
         <CalculatorButton setCalcState={setCalcState} displayValue={"0"} variant="dark" />          
         </Col>

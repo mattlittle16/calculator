@@ -24,7 +24,9 @@ const CalculatorButton = ( {setCalcState, displayValue, variant }: TCalculatorBu
         else if (op.find(x => x.op === val.innerHTML.toLowerCase())) {
             let cop = op.find(x => x.op === val.innerHTML.toLowerCase());
             console.log(cop);
-            setCalcState( (prev) => { return { 
+            setCalcState( (prev) => { 
+                console.log(prev);
+                return { 
                 ...prev, 
                 prevOp: prev.currentOp, 
                 currentOp: cop?.eop,
@@ -72,7 +74,8 @@ const CalculatorButton = ( {setCalcState, displayValue, variant }: TCalculatorBu
             setCalcState( (prev) => { return { 
                 ...prev,
                 screenValue: prev.posNeg === PosNeg.Negative ? (0 - +(prev.screenValue).substring(1) / 100).toString() : (+(prev.screenValue) / 100).toString(),
-                currentValue: prev.posNeg === PosNeg.Negative ? 0 - +(prev.screenValue).substring(1) / 100 : +(prev.screenValue) / 100
+                currentValue: prev.posNeg === PosNeg.Negative ? 0 - +(prev.screenValue).substring(1) / 100 : +(prev.screenValue) / 100,
+                prevValue: prev.posNeg === PosNeg.Negative ? 0 - +(prev.screenValue).substring(1) / 100 : +(prev.screenValue) / 100
             }});
             console.log('%');
         }
